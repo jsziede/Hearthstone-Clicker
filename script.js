@@ -5,7 +5,8 @@ var accumulator = 0.1;                  //the number that is added to the counte
 var multiplier = 1;                     //the number that the accumulator is multiplied by every second
 var level = 1;                          //the level of the player and the encountered enemy
 var enemyString = "Wisp";               //the name of the current enemy card
-var pointsEarnedByClickPerSecond = 0;   //statistic to count how many points per second are being earned by clicking the card
+var pointsEarnedByClickPerSecond = accumulator;   //statistic to count how many points per second are being earned by clicking the card
+var clickBonus = 0;                     //extra points added only when clicking
 
 //function to determine if "point" or "points" should be printed
 var pointGrammar = function(numberToCompare) {
@@ -65,17 +66,15 @@ function loadCookies() {
     {
         level = parseFloat(getCookie("level"));
     }
+    
+    if(getCookie("clickBonus") != 0) {
+        clickBonus = parseFloat(getCookie("clickBonus"));
+    }
 }
 
 window.onload = function() {
     //call to display the proper enemy
     getEnemy();
-    
-    //call to display scoring information
-    getAccumAndMultString();
-    
-    //call to find the value of one card click
-    getClickValue();
     
     //the score is updated every second to show the constantly updating counter
     document.getElementById("scoreKeeper").innerHTML = Math.round(scoreCounter * 100) / 100;
@@ -84,7 +83,7 @@ window.onload = function() {
     //the card, and then compares that result to how many points the user earns with the
     //automatic accumulation. the final result of the comparison is returned to the user
     //in a string that reports how many more points per second the user earns by clicking
-    document.getElementById("rateKeeper").innerHTML = ("At your current rate of clicking, you are making " + Math.round(pointsEarnedByClickPerSecond / accumMultProduct()) + " more " + pointGrammar(pointsEarnedByClickPerSecond / accumMultProduct()) + " per second than you would be without clicking.");
+    document.getElementById("rateKeeper").innerHTML = ("At your current rate of clicking, you are making " + (Math.round((pointsEarnedByClickPerSecond - accumMultProduct()) * 10) / 10) + " more " + pointGrammar(pointsEarnedByClickPerSecond - accumMultProduct()) + " per second than you would be without clicking.");
 }
 
 //simple function to store cookies
@@ -108,16 +107,17 @@ setInterval(function() {
         setCookie("accumulator", accumulator);
         setCookie("multiplier", multiplier);
         setCookie("level", level);
+        setCookie("clickBonus", clickBonus);
     }
     
     //string that determines how many points the user is earning each second by clicking
     //the card, and then compares that result to how many points the user earns with the
     //automatic accumulation. the final result of the comparison is returned to the user
     //in a string that reports how many more points per second the user earns by clicking
-    document.getElementById("rateKeeper").innerHTML = ("At your current rate of clicking, you are making " + Math.round(pointsEarnedByClickPerSecond / accumMultProduct()) + " more " + pointGrammar(pointsEarnedByClickPerSecond / accumMultProduct()) + " per second than you would be without clicking.");
+    document.getElementById("rateKeeper").innerHTML = ("At your current rate of clicking, you are making " + (Math.round((pointsEarnedByClickPerSecond - accumMultProduct()) * 10) / 10) + " more " + pointGrammar(pointsEarnedByClickPerSecond - accumMultProduct()) + " per second than you would be without clicking.");
     
     //the accumulator for the above string is reset after being printed
-    pointsEarnedByClickPerSecond = 0;
+    pointsEarnedByClickPerSecond = accumulator;
 }, 1000); //one second per interval
 
 //every time the button that contains the counter is clicked
@@ -125,8 +125,8 @@ function cardClick()
 {
     //counter is incremented by one at the beginning,
     //but takes into account the multiplier when obtained
-    scoreCounter = scoreCounter + accumMultProduct();
-    pointsEarnedByClickPerSecond = pointsEarnedByClickPerSecond + accumMultProduct();
+    scoreCounter = scoreCounter + accumMultProduct() + clickBonus;
+    pointsEarnedByClickPerSecond = pointsEarnedByClickPerSecond + accumMultProduct() + clickBonus;
     
     //score is updated every time the button is clicked
     document.getElementById("scoreKeeper").innerHTML = Math.round(scoreCounter * 100) / 100;
@@ -151,7 +151,7 @@ function getEnemy()
     if(level == 1) {
         enemyString = "Wisp";
         //accumulator is increased based on enemy
-        accumulator = 1;
+        accumulator = 0.1;
     }
     
     //the name of the enemy is printed to the user
@@ -173,4 +173,17 @@ function getAccumAndMultString() {
 //function to tell the user how many points they will earn each time they click the card
 function getClickValue() {
     document.getElementById("clickScoreCounter").innerHTML = ("You may also click the card for " + (accumMultProduct()) + " " + pointGrammar(accumMultProduct) + " per click.");
+}
+
+function reset() {
+    cookiesEnabled = true;
+    scoreCounter = 0;
+    accumulator = 0.1;
+    multiplier = 1;
+    level = 1;
+    enemyString = "Wisp";
+    pointsEarnedByClickPerSecond = 0;
+    clickBonus = 0;
+    //call to display the proper enemy
+    getEnemy();
 }

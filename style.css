@@ -6,14 +6,10 @@ body {
 }
 
 #centralCardContainer {
-    width: 40%;
-    max-width: 1000px;
-    height: 100%;
-    border-right: solid 5px green;
-    border-left: solid 5px green;
+    width: 416px;
     box-sizing: border-box;
     overflow: hidden;
-    display: inline-block;
+    margin: auto;
 }
 
 .cardHolder {
@@ -49,11 +45,8 @@ body {
 }
 
 #textContainer {
-    background: white;
-    height: 1000px;
     padding: 5px 10px;
-    background: url('http://img00.deviantart.net/7178/i/2012/234/b/b/old_paper_5_by_snowys_stock-d5a8efc.jpg');
-    background-size: cover;
-    border-top: solid 5px green;
     font-size: 16px;
+    background: rgba(206,206,206,0.6);
+    color: black;
 }
