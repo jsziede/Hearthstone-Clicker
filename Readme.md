@@ -1,0 +1,2 @@
+#Hearthstone Clicker
+A simple clicker game based on the card game Hearthstone as a dedication to a couple of my friends. I am creating this game as a means to learn and teach myself the basics of JavaScript.
