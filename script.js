@@ -182,7 +182,7 @@ function reset() {
     multiplier = 1;
     level = 1;
     enemyString = "Wisp";
-    pointsEarnedByClickPerSecond = 0;
+    pointsEarnedByClickPerSecond = accumulator;
     clickBonus = 0;
     //call to display the proper enemy
     getEnemy();
