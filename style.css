@@ -1,0 +1,59 @@
+body {
+    background: url('http://img04.deviantart.net/b00a/i/2013/009/b/6/morning_in_the_town_by_puyoakira-d5qxx2h.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: Tahoma;
+}
+
+#centralCardContainer {
+    width: 40%;
+    max-width: 1000px;
+    height: 100%;
+    border-right: solid 5px green;
+    border-left: solid 5px green;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.cardHolder {
+    width: 286px;
+    height: 395px;
+    background: url('http://media-hearth.cursecdn.com/avatars/147/697/273.png');
+    background-size: 100%100%;
+    margin: auto;
+    text-align: center;
+    padding-top: 293px;
+    box-sizing: border-box;
+    color: black;
+    font-size: 30px;
+    font-family: Tahoma;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#button {
+    overflow: hidden;
+    background: none;
+    color: green;
+    padding: 10px;
+    border: solid 2px green;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+#textContainer {
+    background: white;
+    height: 1000px;
+    padding: 5px 10px;
+    background: url('http://img00.deviantart.net/7178/i/2012/234/b/b/old_paper_5_by_snowys_stock-d5a8efc.jpg');
+    background-size: cover;
+    border-top: solid 5px green;
+    font-size: 16px;
+}
