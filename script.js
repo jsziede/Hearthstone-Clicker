@@ -1,11 +1,11 @@
 //all variables are initialized to their default values
-var cookiesEnabled = true;  //whether or not the user wants to save progress via cookies
-var scoreCounter = 0;       //the number used for the current score
-var accumulator = 0.1;      //the number that is added to the counter every second
-var multiplier = 1;         //the number that the accumulator is multiplied by every second
-var level = 1;              //the level of the player and the encountered enemy
-var enemyString = "Wisp";   //the name of the current enemy card
-var pointsEarnedByClickPerSecond = 0; //statistic to count how many points per second are being earned by clicking the card
+var cookiesEnabled = true;              //whether or not the user wants to save progress via cookies
+var scoreCounter = 0;                   //the number used for the current score
+var accumulator = 0.1;                  //the number that is added to the counter every second
+var multiplier = 1;                     //the number that the accumulator is multiplied by every second
+var level = 1;                          //the level of the player and the encountered enemy
+var enemyString = "Wisp";               //the name of the current enemy card
+var pointsEarnedByClickPerSecond = 0;   //statistic to count how many points per second are being earned by clicking the card
 
 //function to determine if "point" or "points" should be printed
 var pointGrammar = function(numberToCompare) {
