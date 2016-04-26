@@ -12,10 +12,9 @@ body {
     margin: auto;
 }
 
-.cardHolder {
+#cardHolder {
     width: 286px;
     height: 395px;
-    background: url('http://media-hearth.cursecdn.com/avatars/147/697/273.png');
     background-size: 100%100%;
     margin: auto;
     text-align: center;
