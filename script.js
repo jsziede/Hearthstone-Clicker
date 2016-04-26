@@ -250,7 +250,7 @@ function reset() {
     multiplier = 1;
     level = 1;
     enemyString = "Wisp";
-    pointsEarnedByClickPerSecond = 0;
+    pointsEarnedByClickPerSecond = totalAccumulator;
     clickBonus = 0;
     
     //call to display the enemy's name and get the proper attributes of it
