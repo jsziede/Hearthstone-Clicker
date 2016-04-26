@@ -2,14 +2,40 @@
 var cookiesEnabled = true;              //whether or not the user wants to save progress via cookies
 var scoreCounter = 0;                   //the number used for the current score
 var accumulator = 0.1;                  //the number that is added to the counter every second
-var enemyAccumBonus = 0;                //the additional bonus to the accumulator the enemy provides
-var totalAccumulator = accumulator + enemyAccumBonus;   //the total automatic point accumulation, based on the regular accumulator and the bonus provided by the enemy
 var multiplier = 1;                     //the number that the accumulator is multiplied by every second
 var level = 1;                          //the level of the player and the encountered enemy
-var enemyString = "Wisp";               //the name of the current enemy card
-var pointsEarnedByClickPerSecond = accumulator;   //statistic to count how many points per second are being earned by clicking the card
 var clickBonus = 0;                     //extra points added only when clicking
-var enemyHealth = 250;                  //the amount of health (points) an enemy has
+var pointsEarnedByClickPerSecond = accumulator + clickBonus;   //statistic to count how many points per second are being earned by clicking the card
+var enemy = {
+    name: "Wisp",   //name of the enemy
+    health: 250,    //how many points to earn to kill the enemy
+    accumBonus: 0   //additional points to the accumulator that the enemy provides
+};
+var totalAccumulator = accumulator + enemy.accumBonus;   //the total automatic point accumulation, based on the regular accumulator and the bonus provided by the enemy
+
+var getString = function(nameOfString) {
+    if (nameOfString == "getStringCard") {
+        
+        return Math.round(scoreCounter * 10) / 10;
+        
+    } else if (nameOfString == "getStringCompare") {
+        
+        return "At your current rate of clicking, you are making " + (Math.round((pointsEarnedByClickPerSecond - accumMultProduct()) * 10) / 10) + " more " + pointGrammar(pointsEarnedByClickPerSecond - accumMultProduct()) + " per second than you would be without clicking.";
+        
+    } else if (nameOfString == "getStringEnemy") {
+        
+        return "You have encountered an enemy " + enemy.name + "! You need to earn " + Math.round(enemy.health * 10) / 10 + " more " + pointGrammar(enemy.health) + " to defeat it.";
+        
+    } else if (nameOfString == "getStringAccumInfo") {
+        
+        return "Your score is currently being increased by " + totalAccumulator + " " + pointGrammar(totalAccumulator) + " each second, with a multiplier of " + multiplier + ", totalling " + accumMultProduct() + " " + pointGrammar(accumMultProduct()) + " per second.";
+        
+    } else if (nameOfString == "getStringClickVal") {
+        
+        return "You may also click the card for " + (accumMultProduct()) + " " + pointGrammar(accumMultProduct) + " per click.";
+        
+    }
+}
 
 //function to determine if "point" or "points" should be printed
 var pointGrammar = function(numberToCompare) {
@@ -22,7 +48,7 @@ var pointGrammar = function(numberToCompare) {
 
 //to determine the product of the accumulator and multiplier at any given time
 var accumMultProduct = function() {
-    totalAccumulator = accumulator + enemyAccumBonus;
+    totalAccumulator = accumulator + enemy.accumBonus;
     return (totalAccumulator * multiplier);
 }
 
@@ -80,7 +106,7 @@ function loadCookies() {
     }
     
     if(getCookie("enemyHealth") != "250") {
-        enemyHealth = parseFloat(getCookie("enemyHealth"));
+        enemy.health = parseFloat(getCookie("enemyHealth"));
     }
 }
 
@@ -89,13 +115,13 @@ window.onload = function() {
     getEnemy();
     
     //the score is updated every second to show the constantly updating counter
-    document.getElementById("scoreKeeper").innerHTML = Math.round(scoreCounter * 100) / 100;
+    document.getElementById("cardHolder").innerHTML = getString("getStringCard");
     
     //string that determines how many points the user is earning each second by clicking
     //the card, and then compares that result to how many points the user earns with the
     //automatic accumulation. the final result of the comparison is returned to the user
     //in a string that reports how many more points per second the user earns by clicking
-    document.getElementById("rateKeeper").innerHTML = ("At your current rate of clicking, you are making " + (Math.round((pointsEarnedByClickPerSecond - accumMultProduct()) * 10) / 10) + " more " + pointGrammar(pointsEarnedByClickPerSecond - accumMultProduct()) + " per second than you would be without clicking.");
+    document.getElementById("rateKeeper").innerHTML = getString("getStringCompare");
 }
 
 //simple function to store cookies
@@ -115,17 +141,17 @@ setInterval(function() {
     //check if leveled up.
     //leveling is based on lowering the enemy's health to 0, so one
     //enemy death is equal to one level up
-    if(enemyHealth - accumMultProduct() <= 0) {
-        enemyHealth = 0;    //prevent string from printing a negative number
+    if(enemy.health - accumMultProduct() <= 0) {
+        enemy.health = 0;    //prevent string from printing a negative number
         level++;            //user gains one level
         levelUp();          //function to level up is called
     } else {
         //if not leveled up, enemy health is decreased normally
-        enemyHealth = enemyHealth - accumMultProduct();
+        enemy.health = enemy.health - accumMultProduct();
     }
     
     //the score is updated every second to show the constantly updating counter
-    document.getElementById("cardHolder").innerHTML = Math.round(scoreCounter * 100) / 100;
+    document.getElementById("cardHolder").innerHTML = getString("getStringCard");
     
     //stores cookies if they are enabled
     if(cookiesEnabled) {
@@ -135,7 +161,7 @@ setInterval(function() {
         setCookie("multiplier", multiplier);
         setCookie("level", level);
         setCookie("clickBonus", clickBonus);
-        setCookie("enemyHealth", enemyHealth);
+        setCookie("enemyHealth", enemy.health);
         setCookie("totalAccumulator", totalAccumulator);
     }
     
@@ -143,7 +169,7 @@ setInterval(function() {
     //the card, and then compares that result to how many points the user earns with the
     //automatic accumulation. the final result of the comparison is returned to the user
     //in a string that reports how many more points per second the user earns by clicking
-    document.getElementById("rateKeeper").innerHTML = ("At your current rate of clicking, you are making " + (Math.round((pointsEarnedByClickPerSecond - accumMultProduct()) * 10) / 10) + " more " + pointGrammar(pointsEarnedByClickPerSecond - accumMultProduct()) + " per second than you would be without clicking.");
+    document.getElementById("rateKeeper").innerHTML = getString("getStringCompare");
     
     //the accumulator for the above string is reset after being printed
     pointsEarnedByClickPerSecond = totalAccumulator;
@@ -157,17 +183,17 @@ function cardClick()
     //counter is incremented by one at the beginning,
     //but takes into account the multiplier when obtained
     scoreCounter = scoreCounter + accumMultProduct() + clickBonus;
-    if(enemyHealth - (accumMultProduct() + clickBonus) <= 0) {
-        enemyHealth = 0;
+    if(enemy.health - (accumMultProduct() + clickBonus) <= 0) {
+        enemy.health = 0;
         level++;
         levelUp();
     } else {
-        enemyHealth = enemyHealth - (accumMultProduct() + clickBonus);
+        enemy.health = enemy.health - (accumMultProduct() + clickBonus);
     }
     pointsEarnedByClickPerSecond = pointsEarnedByClickPerSecond + accumMultProduct() + clickBonus;
     
     //score is updated every time the button is clicked
-    document.getElementById("cardHolder").innerHTML = Math.round(scoreCounter * 100) / 100;
+    document.getElementById("cardHolder").innerHTML = getString("getStringCard");
 }
 
 //called whenever the user clicks a Multiplier Upgrade button
@@ -187,19 +213,19 @@ function multiUpgrade()
 function levelUp()
 {
     if(level == 1) {
-        enemyString = "Wisp";   //prints the enemy's name to the user
-        enemyAccumBonus = 0;    //accumulator is increased based on enemy
-        enemyHealth = 250;      //enemy's health is assigned
+        enemy.name = "Wisp";   //prints the enemy's name to the user
+        enemy.accumBonus = 0;    //accumulator is increased based on enemy
+        enemy.health = 250;      //enemy's health is assigned
         document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/147/697/273.png')";
     } else if(level == 2) {
-        enemyString = "Murloc Tinyfin";
-        enemyAccumBonus = 1;
-        enemyHealth = 1000;
+        enemy.string = "Murloc Tinyfin";
+        enemy.accumBonus = 1;
+        enemy.health = 1000;
         document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/272/301/27225.png')";
     }
     
     //the name of the enemy is printed to the user
-    document.getElementById("encounterText").innerHTML = ("You have encountered an enemy " + enemyString + "! You need to earn " + Math.round(enemyHealth * 10) / 10 + " more " + pointGrammar(enemyHealth) + " to defeat it.");
+    document.getElementById("encounterText").innerHTML = getString("getStringEnemy");
     
     //call to display scoring information
     getAccumAndMultString();
@@ -211,17 +237,17 @@ function levelUp()
 //see levelUp() for more details of this function
 function getEnemy() {
     if(level == 1) {
-        enemyString = "Wisp";
-        enemyAccumBonus = 0;
+        enemy.name = "Wisp";
+        enemy.accumBonus = 0;
         document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/147/697/273.png')";
     } else if(level == 2) {
-        enemyString = "Murloc Tinyfin";
-        enemyAccumBonus = 1;
+        enemy.name = "Murloc Tinyfin";
+        enemy.accumBonus = 1;
         document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/272/301/27225.png')";
     }
     
     //the name of the enemy is printed to the user
-    document.getElementById("encounterText").innerHTML = ("You have encountered an enemy " + enemyString + "! You need to earn " + Math.round(enemyHealth * 10) / 10 + " more " + pointGrammar(enemyHealth) + " to defeat it.");
+    document.getElementById("encounterText").innerHTML = getString("getStringEnemy");
     
     //call to display scoring information
     getAccumAndMultString();
@@ -233,12 +259,12 @@ function getEnemy() {
 function getAccumAndMultString() {
     //string below counter button that tells user how much each addition to their score
     //is being multiplied by
-    document.getElementById("multKeeper").innerHTML = ("Your score is currently being increased by " + totalAccumulator + " " + pointGrammar(totalAccumulator) + " each second, with a multiplier of " + multiplier + ", totalling " + accumMultProduct() + " " + pointGrammar(accumMultProduct()) + " per second.");
+    document.getElementById("multKeeper").innerHTML = getString("getStringAccumInfo")
 }
 
 //function to tell the user how many points they will earn each time they click the card
 function getClickValue() {
-    document.getElementById("clickScoreCounter").innerHTML = ("You may also click the card for " + (accumMultProduct()) + " " + pointGrammar(accumMultProduct) + " per click.");
+    document.getElementById("clickScoreCounter").innerHTML = getString("getStringClickVal");
 }
 
 //simple function to reset all variables to their default values
@@ -249,7 +275,7 @@ function reset() {
     accumulator = 0.1;
     multiplier = 1;
     level = 1;
-    enemyString = "Wisp";
+    enemy.name = "Wisp";
     pointsEarnedByClickPerSecond = totalAccumulator;
     clickBonus = 0;
     
