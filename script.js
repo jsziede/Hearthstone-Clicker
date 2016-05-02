@@ -11,6 +11,14 @@ var enemy = {
     health: 250,    //how many points to earn to kill the enemy
     accumBonus: 0   //additional points to the accumulator that the enemy provides
 };
+
+//stores the levels of each upgrade, to be used with the upgrade buttons in the GUI
+var upgrade = {
+    accum: 1,
+    multi: 1,
+    click: 1
+};
+
 var totalAccumulator = accumulator + enemy.accumBonus;   //the total automatic point accumulation, based on the regular accumulator and the bonus provided by the enemy
 
 var getString = function(nameOfString) {
@@ -28,11 +36,27 @@ var getString = function(nameOfString) {
         
     } else if (nameOfString == "getStringAccumInfo") {
         
-        return "Your score is currently being increased by " + totalAccumulator + " " + pointGrammar(totalAccumulator) + " each second, with a multiplier of " + multiplier + ", totalling " + accumMultProduct() + " " + pointGrammar(accumMultProduct()) + " per second.";
+        return "Your score is currently being increased by " + Math.round(totalAccumulator * 10) / 10 + " " + pointGrammar(totalAccumulator) + " each second, with a multiplier of " + multiplier + ", totalling " + Math.round(accumMultProduct() * 10) / 10 + " " + pointGrammar(accumMultProduct()) + " per second.";
         
     } else if (nameOfString == "getStringClickVal") {
         
-        return "You may also click the card for " + (accumMultProduct()) + " " + pointGrammar(accumMultProduct) + " per click.";
+        return "You may also click the card for " + Math.round(accumMultProduct() * 10) / 10 + " " + pointGrammar(accumMultProduct) + " per click.";
+        
+    } else if (nameOfString == "getStringAccumUpgradeIncrease") {
+    
+        return ("Accumulator +" + accumBoost(upgrade.accum) + " " + pointGrammar(accumBoost(upgrade.accum)));
+        
+    } else if (nameOfString == "getStringAccumUpgradeCost") {
+        
+        return ("Cost: " + accumCost(upgrade.accum) + " " + pointGrammar(accumCost(upgrade.accum)));
+        
+    }  else if (nameOfString == "getStringMultiUpgradeIncrease") {
+    
+        return ("Multiplier x" + (upgrade.multi + 1) + " " + pointGrammar(upgrade.multi + 1));
+        
+    } else if (nameOfString == "getStringMultiUpgradeCost") {
+        
+        return ("Cost: " + multiCost(upgrade.multi) + " " + pointGrammar(multiCost(upgrade.multi)));
         
     }
 }
@@ -50,6 +74,32 @@ var pointGrammar = function(numberToCompare) {
 var accumMultProduct = function() {
     totalAccumulator = accumulator + enemy.accumBonus;
     return (totalAccumulator * multiplier);
+}
+
+//determines the cost to purchase an upgrade for the accumulator
+var accumCost = function(accumUpgradeLevel) {
+    return Math.pow(2, accumUpgradeLevel) * 10;
+}
+
+//determines the increase to the accumulator for each upgrade
+var accumBoost = function(accumUpgradeLevel) {
+    return Math.pow(accumUpgradeLevel, 2) / 10;
+}
+
+//determines the cost to purchase an upgrade for the multiplier
+var multiCost = function(multiUpgradeLevel) {
+    var a = multiUpgradeLevel;
+    var b = 0;
+    var c = 0;
+    
+    for (var i = 0; i < multiUpgradeLevel; i++)
+    {
+        b = a - 1;
+        c = c + (a + b);
+        a++;
+    }
+    
+    return c * 1000;
 }
 
 //code retrieved from W3C's website to fetch cookies
@@ -108,11 +158,22 @@ function loadCookies() {
     if(getCookie("enemyHealth") != "250") {
         enemy.health = parseFloat(getCookie("enemyHealth"));
     }
+    if(getCookie("upgrade.accum") != "1") {
+        upgrade.accum = parseFloat(getCookie("upgrade.accum"));
+    }
+    if(getCookie("upgrade.multi") != "1") {
+        upgrade.multi = parseFloat(getCookie("upgrade.multi"));
+    }
 }
 
 window.onload = function() {
+    pointsEarnedByClickPerSecond = accumMultProduct();
+    
     //call to display the proper enemy
     getEnemy();
+    
+    //display all upgrade info in the GUI buttons
+    getButtonStrings();
     
     //the score is updated every second to show the constantly updating counter
     document.getElementById("cardHolder").innerHTML = getString("getStringCard");
@@ -163,6 +224,8 @@ setInterval(function() {
         setCookie("clickBonus", clickBonus);
         setCookie("enemyHealth", enemy.health);
         setCookie("totalAccumulator", totalAccumulator);
+        setCookie("upgrade.accum", upgrade.accum);
+        setCookie("upgrade.multi", upgrade.multi);
     }
     
     //string that determines how many points the user is earning each second by clicking
@@ -172,7 +235,7 @@ setInterval(function() {
     document.getElementById("rateKeeper").innerHTML = getString("getStringCompare");
     
     //the accumulator for the above string is reset after being printed
-    pointsEarnedByClickPerSecond = totalAccumulator;
+    pointsEarnedByClickPerSecond = accumMultProduct();
 }, 1000); //one second per interval
 
 //every time the button that contains the counter is clicked
@@ -194,19 +257,6 @@ function cardClick()
     
     //score is updated every time the button is clicked
     document.getElementById("cardHolder").innerHTML = getString("getStringCard");
-}
-
-//called whenever the user clicks a Multiplier Upgrade button
-function multiUpgrade()
-{
-    multiplier = 1.5;
-    setCookie("multiplier", multiplier);
-    
-    //call to display scoring information to the user
-    getAccumAndMultString();
-    
-    //call to find the value of one card click due to the change of the multiplier
-    getClickValue();
 }
 
 //called whenever the enemy card is changed, aka when user levels up and gains mana
@@ -276,9 +326,49 @@ function reset() {
     multiplier = 1;
     level = 1;
     enemy.name = "Wisp";
-    pointsEarnedByClickPerSecond = totalAccumulator;
+    pointsEarnedByClickPerSecond = accumMultProduct();
     clickBonus = 0;
+    upgrade.accum = 1;
+    upgrade.multi = 1;
     
     //call to display the enemy's name and get the proper attributes of it
     levelUp();
+    
+    getButtonStrings();
+}
+
+//every time the user clicks the accumulator upgrade button in the GUI
+function accumClick() {
+    if (scoreCounter >= accumCost(upgrade.accum)) {
+        scoreCounter = scoreCounter - accumCost(upgrade.accum);
+        accumulator = accumulator + accumBoost(upgrade.accum);
+        upgrade.accum++;
+        getButtonStrings();
+        document.getElementById("cardHolder").innerHTML = getString("getStringCard");
+        getAccumAndMultString();
+        getClickValue();
+        pointsEarnedByClickPerSecond = accumMultProduct();
+    }
+}
+
+//called whenever the user clicks a Multiplier Upgrade button
+function multiClick()
+{
+    if (scoreCounter >= multiCost(upgrade.multi)) {
+        scoreCounter = scoreCounter - multiCost(upgrade.multi);
+        upgrade.multi++;
+        getButtonStrings();
+        document.getElementById("cardHolder").innerHTML = getString("getStringCard");
+        getAccumAndMultString();
+        getClickValue();
+        pointsEarnedByClickPerSecond = accumMultProduct();
+    }
+}
+
+//prints all of the cost and upgrade info in the upgrade buttons from the GUI
+function getButtonStrings() {
+    //prints info to the button in the GUI
+    document.getElementById("accumUpgrade").innerHTML = getString("getStringAccumUpgradeIncrease") + "<br>" + getString("getStringAccumUpgradeCost");
+    
+    document.getElementById("multiUpgrade").innerHTML = getString("getStringMultiUpgradeIncrease") + "<br>" + getString("getStringMultiUpgradeCost");
 }

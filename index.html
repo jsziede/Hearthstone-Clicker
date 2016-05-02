@@ -6,14 +6,22 @@
 	</script>
 </head>
 <body>
-    <div id ="centralCardContainer">
-        <div id="cardHolder" onclick="cardClick()"></div>
-        <div id="textContainer">
-            <p id="encounterText"></p>
-            <p id="multKeeper"></p>
-            <p id="clickScoreCounter"></p>
-            <p id="rateKeeper"></p>
-            <button id="reset" onclick="reset()">reset</button>
+    <div id="container">
+        <div id ="centralCardContainer">
+            <div id="cardHolder" onclick="cardClick()"></div>
+            <div id="textContainer">
+                <p id="encounterText"></p>
+                <p id="multKeeper"></p>
+                <p id="clickScoreCounter"></p>
+                <p id="rateKeeper"></p>
+                <button id="reset" onclick="reset()">reset</button>
+            </div>
+        </div>
+        <div id="rightColumn">
+            <p id="headingOne">Upgrades</p>
+            <div id="accumUpgrade" class="upgrade" onclick="accumClick()"></div>
+            <br>
+            <div id="multiUpgrade" class="upgrade" onclick="multiClick()"></div>
         </div>
     </div>
 </body>
