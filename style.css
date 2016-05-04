@@ -56,9 +56,6 @@ body {
     width: 100%;
     overflow: hidden;
     margin: auto;
-    background: url('http://img04.deviantart.net/b00a/i/2013/009/b/6/morning_in_the_town_by_puyoakira-d5qxx2h.jpg');
-    background-size: cover;
-    background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: center;

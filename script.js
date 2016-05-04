@@ -7,8 +7,8 @@ var level = 1;                          //the level of the player and the encoun
 var clickBonus = 0;                     //extra points added only when clicking
 var pointsEarnedByClickPerSecond = accumulator + clickBonus;   //statistic to count how many points per second are being earned by clicking the card
 var enemy = {
-    name: "Wisp",   //name of the enemy
-    health: 250,    //how many points to earn to kill the enemy
+    name: "Target Dummy",   //name of the enemy
+    health: 1000,    //how many points to earn to kill the enemy
     accumBonus: 0   //additional points to the accumulator that the enemy provides
 };
 
@@ -36,7 +36,7 @@ var getString = function(nameOfString) {
         
     } else if (nameOfString == "getStringAccumInfo") {
         
-        return "Your score is currently being increased by " + Math.round(totalAccumulator * 10) / 10 + " " + pointGrammar(totalAccumulator) + " each second, with a multiplier of " + multiplier + ", totalling " + Math.round(accumMultProduct() * 10) / 10 + " " + pointGrammar(accumMultProduct()) + " per second.";
+        return "Your score is currently being increased by " + Math.round(totalAccumulator * 10) / 10 + " " + pointGrammar(totalAccumulator) + " each second, with a multiplier of " + Math.round(multiplier * 10) /10 + ", totalling " + Math.round(accumMultProduct() * 10) / 10 + " " + pointGrammar(accumMultProduct()) + " per second.";
         
     } else if (nameOfString == "getStringClickVal") {
         
@@ -52,11 +52,11 @@ var getString = function(nameOfString) {
         
     }  else if (nameOfString == "getStringMultiUpgradeIncrease") {
     
-        return ("Multiplier x" + (upgrade.multi + 1) + " " + pointGrammar(upgrade.multi + 1));
+        return ("Multiplier +" + Math.round((0.1 * level) * 10) / 10 + " " + pointGrammar(upgrade.multi + 0.1));
         
     } else if (nameOfString == "getStringMultiUpgradeCost") {
         
-        return ("Cost: " + multiCost(upgrade.multi) + " " + pointGrammar(multiCost(upgrade.multi)));
+        return ("Cost: " + Math.round(multiCost(upgrade.multi) * 10) /10 + " " + pointGrammar(multiCost(upgrade.multi)));
         
     }
 }
@@ -88,18 +88,7 @@ var accumBoost = function(accumUpgradeLevel) {
 
 //determines the cost to purchase an upgrade for the multiplier
 var multiCost = function(multiUpgradeLevel) {
-    var a = multiUpgradeLevel;
-    var b = 0;
-    var c = 0;
-    
-    for (var i = 0; i < multiUpgradeLevel; i++)
-    {
-        b = a - 1;
-        c = c + (a + b);
-        a++;
-    }
-    
-    return c * 1000;
+    return Math.pow(multiUpgradeLevel, 2) * (500 * multiUpgradeLevel);
 }
 
 //code retrieved from W3C's website to fetch cookies
@@ -193,9 +182,6 @@ function setCookie(property, value) {
 //function that increments the counter each second
 setInterval(function() {
     
-    //function to retrieve the name of enemy and update other string accordingly
-    getEnemy();
-    
     //counter accumulates with itself along with the time-based accumulator
     scoreCounter = scoreCounter + accumMultProduct();
     
@@ -209,6 +195,9 @@ setInterval(function() {
     } else {
         //if not leveled up, enemy health is decreased normally
         enemy.health = enemy.health - accumMultProduct();
+        
+        //function to retrieve the name of enemy and update other string accordingly
+        getEnemy();
     }
     
     //the score is updated every second to show the constantly updating counter
@@ -241,11 +230,13 @@ setInterval(function() {
 //every time the button that contains the counter is clicked
 function cardClick()
 {
+    scoreCounter = scoreCounter + accumMultProduct() + clickBonus;
+    
     getEnemy();
     
     //counter is incremented by one at the beginning,
     //but takes into account the multiplier when obtained
-    scoreCounter = scoreCounter + accumMultProduct() + clickBonus;
+
     if(enemy.health - (accumMultProduct() + clickBonus) <= 0) {
         enemy.health = 0;
         level++;
@@ -263,37 +254,50 @@ function cardClick()
 function levelUp()
 {
     if(level == 1) {
-        enemy.name = "Wisp";   //prints the enemy's name to the user
-        enemy.accumBonus = 0;    //accumulator is increased based on enemy
-        enemy.health = 250;      //enemy's health is assigned
-        document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/147/697/273.png')";
+        enemy.health = 1000;      //enemy's health is assigned
     } else if(level == 2) {
-        enemy.string = "Murloc Tinyfin";
-        enemy.accumBonus = 1;
-        enemy.health = 1000;
-        document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/272/301/27225.png')";
+        enemy.health = 15000;
+    } else if(level == 3) {
+        enemy.health = 75000;
+    } else if (level == 4) {
+        enemy.health = 200000;
     }
     
-    //the name of the enemy is printed to the user
-    document.getElementById("encounterText").innerHTML = getString("getStringEnemy");
-    
-    //call to display scoring information
-    getAccumAndMultString();
-    
-    //call to find the value of one card click
-    getClickValue();
+    getEnemy();
 }
 
 //see levelUp() for more details of this function
 function getEnemy() {
     if(level == 1) {
-        enemy.name = "Wisp";
+        enemy.name = "Target Dummy";
         enemy.accumBonus = 0;
-        document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/147/697/273.png')";
+        document.getElementById("cardHolder").style.background = "url('http://i.imgur.com/o0UFvAq.png')";
+        document.getElementById("centralCardContainer").style.background = "url('http://img04.deviantart.net/b00a/i/2013/009/b/6/morning_in_the_town_by_puyoakira-d5qxx2h.jpg')";
+        document.getElementById("centralCardContainer").style.backgroundSize = "cover";
+        document.getElementById("centralCardContainer").style.backgroundPosition = "center";
     } else if(level == 2) {
-        enemy.name = "Murloc Tinyfin";
+        enemy.name = "Angry Chicken";
         enemy.accumBonus = 1;
-        document.getElementById("cardHolder").style.background = "url('http://media-hearth.cursecdn.com/avatars/272/301/27225.png')";
+        document.getElementById("cardHolder").style.background = "url('http://i.imgur.com/RdyB05t.png')";
+        document.getElementById("centralCardContainer").style.background = "url('http://img04.deviantart.net/b00a/i/2013/009/b/6/morning_in_the_town_by_puyoakira-d5qxx2h.jpg')";
+        document.getElementById("centralCardContainer").style.backgroundSize = "cover";
+        document.getElementById("centralCardContainer").style.backgroundPosition = "center";
+    } else if(level == 3) {
+        enemy.name = "Lowly Squire";
+        enemy.accumBonus = 5;
+        document.getElementById("cardHolder").style.background = "url('http://i.imgur.com/D9qazEa.png')";
+        document.getElementById("centralCardContainer").style.background = "url('http://img08.deviantart.net/f247/i/2014/224/f/6/castle_gate_by_jonathandufresne-d7uxbmw.jpg')";
+        document.getElementById("centralCardContainer").style.backgroundSize = "cover";
+        document.getElementById("centralCardContainer").style.backgroundPosition = "center";
+    } else if(level == 4) {
+        enemy.name = "Abusive Sergeant";
+        enemy.accumBonus = 10;
+        document.getElementById("cardHolder").style.background = "url('http://i.imgur.com/g7eEtcM.png')";
+        document.getElementById("centralCardContainer").style.background = "url('http://img08.deviantart.net/f247/i/2014/224/f/6/castle_gate_by_jonathandufresne-d7uxbmw.jpg')";
+        document.getElementById("centralCardContainer").style.backgroundSize = "cover";
+        document.getElementById("centralCardContainer").style.backgroundPosition = "center";
+    } else {
+        level = 4;
     }
     
     //the name of the enemy is printed to the user
@@ -325,7 +329,7 @@ function reset() {
     accumulator = 0.1;
     multiplier = 1;
     level = 1;
-    enemy.name = "Wisp";
+    enemy.name = "Target Dummy";
     pointsEarnedByClickPerSecond = accumMultProduct();
     clickBonus = 0;
     upgrade.accum = 1;
@@ -340,8 +344,8 @@ function reset() {
 //every time the user clicks the accumulator upgrade button in the GUI
 function accumClick() {
     if (scoreCounter >= accumCost(upgrade.accum)) {
-        scoreCounter = scoreCounter - accumCost(upgrade.accum);
-        accumulator = accumulator + accumBoost(upgrade.accum);
+        scoreCounter -= accumCost(upgrade.accum);
+        accumulator += accumBoost(upgrade.accum);
         upgrade.accum++;
         getButtonStrings();
         document.getElementById("cardHolder").innerHTML = getString("getStringCard");
@@ -355,8 +359,9 @@ function accumClick() {
 function multiClick()
 {
     if (scoreCounter >= multiCost(upgrade.multi)) {
-        scoreCounter = scoreCounter - multiCost(upgrade.multi);
-        upgrade.multi++;
+        scoreCounter -= multiCost(upgrade.multi);
+        upgrade.multi += 0.1;
+        multiplier = upgrade.multi;
         getButtonStrings();
         document.getElementById("cardHolder").innerHTML = getString("getStringCard");
         getAccumAndMultString();
