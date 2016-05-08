@@ -2,15 +2,4 @@
 A simple clicker game based on the card game Hearthstone as a dedication to a couple of my friends. I am creating this game as a means to learn and teach myself the basics of JavaScript.
 
 ###Current State of the Project
-The CSS and HTML still has a lot of work to do. Most of the essential JavaScript has been created but there are still a few tweaks to do and a couple more features to add, such as upgrading the accumulator and multipliers, along with changing the enemy and setting.
-
-###Credits
-The inner-gates image was created by puyoakira of DeviantArt
-http://puyoakira.deviantart.com/
-http://puyoakira.deviantart.com/art/Morning-in-the-Town-347583401
-
-The outer-gates image was created by JonathanDufresne of DeviantArt
-http://jonathandufresne.deviantart.com/
-http://jonathandufresne.deviantart.com/art/Castle-Gate-475206440
-
-Credits will be handled accordingly on the web page when further adjustments to the UI are made.
+This project is, for the most part, almost finished. Some more tweaks to the CSS need to be made and user options still need to be added, but you are able to go from start to finish with the game.
