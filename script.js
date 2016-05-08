@@ -8,7 +8,7 @@ var clickBonus = 0;                     //extra points added only when clicking
 var pointsEarnedByClickPerSecond = accumulator + clickBonus;   //statistic to count how many points per second are being earned by clicking the card
 var enemy = {
     name: "Target Dummy",   //name of the enemy
-    health: 1000,    //how many points to earn to kill the enemy
+    health: 2000,    //how many points to earn to kill the enemy
     accumBonus: 0   //additional points to the accumulator that the enemy provides
 };
 
@@ -235,7 +235,7 @@ function cardClick()
     //the name of the enemy is printed to the user
     document.getElementById("encounterText").innerHTML = getString("getStringEnemy");
 
-    if(enemy.health - (accumMultProduct() + clickBonus) <= 0 && level < 25) {
+    if(enemy.health - (accumMultProduct() + clickBonus) <= 0) {
         enemy.health = 0;
         level++;
         levelUp();
@@ -266,7 +266,7 @@ function reset() {
     scoreCounter = 0;
     accumulator = 0.1;
     multiplier = 1;
-    level = 0;
+    level = 1;
     enemy.name = "Target Dummy";
     pointsEarnedByClickPerSecond = accumMultProduct();
     clickBonus = 0;
@@ -318,6 +318,10 @@ function getButtonStrings() {
 }
 
 function getEnemy() {
+    if(level == 0) {
+        level = 1;
+    }
+    
     if(level == 1) {
         enemy.name = "Target Dummy";
         enemy.accumBonus = 0;
@@ -519,10 +523,6 @@ function getEnemy() {
 //called whenever the enemy card is changed, aka when user levels up
 function levelUp()
 {
-    if (level == 0) {
-        level = 1;
-    }
-    
     if (level == 1) {
         enemy.health = 2000;      //enemy's health is assigned
         var audio = new Audio('http://wow.zamimg.com/hearthhead/sounds/GVG_093_TargetDummy_EnterPlay.mp3');                    //audio is played; this is the sound that you hear in Hearthstone when this card is played
