@@ -7,25 +7,31 @@
 </head>
 <body>
     <div id="container">
-        <div id ="centralCardContainer">
-            <div id="cardHolder" onclick="cardClick()"></div>
+        <div id="leftContainer" class="part">
             <div id="textContainer">
                 <p id="encounterText"></p>
                 <p id="multKeeper"></p>
                 <p id="clickScoreCounter"></p>
                 <p id="rateKeeper"></p>
-                <button id="reset" onclick="reset()">reset</button>
-                <button id="reset" onclick="levelUpButton()">level up</button>
-            </div>
-            <div id="backgroundCreds">
+                <div id="backgroundCreds">
                 <p>Background artwork &copy; <a href="#" id="artLink"></a></p>
             </div>
+            </div>
         </div>
-        <div id="rightColumn">
-            <p id="headingOne">Upgrades</p>
-            <div id="accumUpgrade" class="upgrade" onclick="accumClick()"></div>
-            <br>
-            <div id="multiUpgrade" class="upgrade" onclick="multiClick()"></div>
+        <div id="centralCardContainer" class="part" onclick="cardClick()">
+            <div id="cardHolder">
+                <p id="score"></p>
+            </div>
+        </div>
+        <div id="rightContainer" class="part">
+            <div id="rightMargin">
+                <p id="headingOne">Upgrades</p>
+                <div id="accumUpgrade" class="upgrade" onclick="accumClick()"></div>
+                <br>
+                <div id="multiUpgrade" class="upgrade" onclick="multiClick()"></div>
+                <button id="reset" onclick="reset()">Reset</button>
+                <button id="reset" onclick="levelUpButton()">Level Up</button>
+            </div>
         </div>
     </div>
 </body>

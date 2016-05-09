@@ -1,34 +1,90 @@
 body {
-    font-family: Tahoma;
-    margin: 0px;
+    padding: 0px 10px;
+    font-size: 20px;
+    font-family: Tahoma, sans-serif;
+    color: white;
+    background: url('http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/assets/posts/1098/full/seamless-paper-patterns-5.jpg');
 }
 
 #container {
-    width: 100%;
     display: flex;
+    display: -webkit-flex;
+    max-width: 1200px;
+    min-width: 800px;
+    background: black;
+    background-size: cover !important;
+    background-position: center !important;
+    height: 700px;
+    border-radius: 30px;
+    -moz-box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    -webkit-box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     overflow: hidden;
 }
 
-#rightColumn {
-    background: green;
-    display: inline-block;
-    box-sizing: border-box;
-    width: 33.33%;
-    max-width: 900px;
-    min-width: 300px;
-    height: 100%;
-    vertical-align: top;
-    border-left: solid 5px gray;
-    padding: 10px;
-    overflow: auto;
+.part {
+    width: 100%;
 }
 
-#headingOne {
-    font-size: 24px;
-    margin: 5px;
+#leftContainer {
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.Upgrade {
+#textContainer {
+    margin: 15px;
+}
+
+#centralCardContainer {
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    display: flex;
+    justify-content: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#cardHolder {
+    height: 400px;
+    width: 300px;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    margin: auto;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+}
+
+#score {
+    padding-top: 300px;
+    margin: auto;
+    color: black;
+}
+
+#rightContainer {
+    color: white;
+    
+}
+
+#rightMargin {
+    margin: 15px;
+}
+
+.upgrade {
     color: white;
     width: 100%;
     height: 70px;
@@ -44,71 +100,8 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background: url('http://www.fxcovers.com/covers/facebook_cover_photo_hearthstone_easter_chicken-851x315.jpg');
+    background: url('http://bnetcmsus-a.akamaihd.net/cms/blog_header/1EBGXH0X9GKU1396311421844.jpg');
     background-size: cover;
     background-position: center;
-}
-
-#centralCardContainer {
-    box-sizing: border-box;
-    padding: 20px;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#cardHolder {
-    width: 286px;
-    height: 395px;
-    background-size: 100%100%;
-    margin: auto;
-    margin-bottom: 10px;
-    text-align: center;
-    padding-top: 293px;
-    box-sizing: border-box;
-    color: black;
-    font-size: 30px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none; 
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-#button {
-    overflow: hidden;
-    background: none;
-    color: green;
-    padding: 10px;
-    border: solid 2px green;
-    border-radius: 100px;
-    overflow: hidden;
-}
-
-#textContainer {
-    padding: 5px 10px;
-    font-size: 16px;
-    background: rgba(206,206,206,0.6);
-    color: black;
-    max-width: 500px;
-    margin: auto;
-}
-
-#backgroundCreds {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    color: black;
-    font-size: 12px;
-    padding: 3px;
-    line-height: 0px;
-    background: rgba(255,255,255,0.6);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
